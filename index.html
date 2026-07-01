@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="MURI">
+<title>MURI Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --g900:#0D2B1A;
+  --g700:#1B4332;
+  --g500:#2D6A4F;
+  --g300:#52B788;
+  --g100:#D8F3DC;
+  --g50:#F0FAF2;
+  --white:#FFFFFF;
+  --off:#F8FAF8;
+  --text:#1A2E1E;
+  --muted:#6B8F71;
+  --border:#D4E6D6;
+  --gold:#C8963E;
+  --radius:18px;
+  --shadow:0 4px 20px rgba(27,67,50,0.10);
+  --shadow-sm:0 2px 8px rgba(27,67,50,0.08);
+}
+body{background:var(--off);font-family:'Inter',sans-serif;max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:100px;color:var(--text);}
+
+/* ── HEADER ── */
+.header{background:var(--white);border-bottom:1px solid var(--border);padding:54px 20px 16px;position:sticky;top:0;z-index:100;}
+.header-top{display:flex;align-items:center;justify-content:space-between;}
+.brand-mark{display:flex;align-items:center;gap:10px;}
+.leaf-icon{width:32px;height:32px;background:var(--g700);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.brand-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--g700);letter-spacing:0.5px;}
+.brand-tag{font-size:10px;color:var(--muted);font-weight:500;letter-spacing:0.5px;margin-top:1px;}
+.header-rev{text-align:right;}
+.rev-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;}
+.rev-val{font-family:'Playfair Display',serif;font-size:18px;color:var(--g700);font-weight:700;margin-top:2px;}
+
+/* ── CONTENT ── */
+.content{padding:16px 14px;}
+
+/* ── HERO CARD ── */
+.hero-card{background:linear-gradient(135deg,var(--g700) 0%,var(--g500) 100%);border-radius:var(--radius);padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
+.hero-card::before{content:'🌿';position:absolute;right:-10px;top:-10px;font-size:80px;opacity:0.15;transform:rotate(20deg);}
+.hero-greeting{font-size:12px;color:rgba(255,255,255,0.7);font-weight:500;text-transform:uppercase;letter-spacing:1px;}
+.hero-name{font-family:'Playfair Display',serif;font-size:22px;color:white;font-weight:700;margin:4px 0 2px;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,0.65);}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.hero-stat{background:rgba(255,255,255,0.12);border-radius:12px;padding:12px;}
+.hero-stat-val{font-size:20px;font-weight:800;color:white;}
+.hero-stat-label{font-size:10px;color:rgba(255,255,255,0.65);margin-top:2px;font-weight:500;}
+
+/* ── SECTION LABEL ── */
+.section-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:18px 0 10px;}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow-sm);border:1px solid var(--border);}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.card-title{font-size:14px;font-weight:700;color:var(--text);}
+.card-action{font-size:12px;color:var(--g500);font-weight:600;}
+
+/* ── KPI ── */
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.kpi{background:var(--white);border-radius:16px;padding:14px 14px 12px;box-shadow:var(--shadow-sm);border:1px solid var(--border);position:relative;overflow:hidden;}
+.kpi::after{content:attr(data-icon);position:absolute;right:10px;top:10px;font-size:22px;opacity:0.2;}
+.kpi-label{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
+.kpi-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin:6px 0 4px;line-height:1;}
+.kpi-sub{font-size:11px;color:var(--muted);font-weight:500;}
+.kpi-bar{height:3px;border-radius:3px;margin-top:10px;background:var(--g100);}
+.kpi-bar-fill{height:3px;border-radius:3px;}
+
+/* ── PRODUCT ROW ── */
+.prod-row{margin-bottom:14px;}
+.prod-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.prod-name{font-size:13px;font-weight:600;color:var(--text);}
+.prod-rev{font-size:14px;font-weight:800;color:var(--g700);}
+.prod-bar-bg{background:var(--g50);border-radius:6px;height:6px;}
+.prod-bar-fill{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--g700),var(--g300));transition:width 0.7s cubic-bezier(.4,0,.2,1);}
+.prod-meta{font-size:10px;color:var(--muted);margin-top:4px;}
+
+/* ── CHANNEL ROW ── */
+.ch-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);}
+.ch-row:last-child{border-bottom:none;}
+.ch-pill{display:inline-block;background:var(--g50);color:var(--g500);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:2px;}
+.ch-amt{font-size:13px;font-weight:700;color:var(--g700);}
+.ch-orders{font-size:11px;color:var(--muted);margin-top:2px;text-align:right;}
+
+/* ── SALE ROW ── */
+.sale-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);}
+.sale-row:last-child{border-bottom:none;}
+.sale-name{font-size:13px;font-weight:600;}
+.sale-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.sale-val{font-size:15px;font-weight:800;color:var(--g700);}
+.del{background:none;border:none;color:#DC2626;font-size:22px;cursor:pointer;padding:2px 6px;line-height:1;opacity:0.6;}
+.del:active{opacity:1;}
+
+/* ── BUTTONS ── */
+.btn{border:none;border-radius:14px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.btn-primary{background:var(--g700);color:white;padding:14px 20px;font-size:15px;width:100%;display:block;letter-spacing:0.2px;}
+.btn-primary:active{background:var(--g900);}
+.btn-gold{background:linear-gradient(135deg,#D4A843,#C8963E);color:white;padding:14px 20px;font-size:15px;width:100%;display:block;letter-spacing:0.2px;box-shadow:0 4px 14px rgba(200,150,62,0.35);}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--g700);padding:11px 16px;font-size:14px;width:100%;}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:10px;}
+.btn+.btn{margin-top:8px;}
+
+/* ── INPUTS ── */
+.field{margin-bottom:12px;}
+.field-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;display:block;}
+input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border);font-size:14px;background:var(--off);font-family:'Inter',sans-serif;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;}
+input:focus,select:focus{border-color:var(--g500);background:white;}
+.select-wrap{position:relative;}
+.select-wrap::after{content:"▾";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:13px;}
+.select-wrap select{padding-right:36px;}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:white;border-top:1px solid var(--border);display:flex;z-index:200;padding:6px 0 calc(6px + env(safe-area-inset-bottom,10px));box-shadow:0 -4px 20px rgba(27,67,50,0.07);}
+.nav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;}
+.nav-icon{font-size:22px;line-height:1;}
+.nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;transition:color 0.15s;}
+.nav-pip{width:18px;height:3px;background:var(--g700);border-radius:3px;}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(13,43,26,0.45);z-index:300;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px);}
+.modal{background:white;border-radius:24px 24px 0 0;padding:24px 20px;width:100%;max-width:430px;max-height:90vh;overflow-y:auto;padding-bottom:calc(24px + env(safe-area-inset-bottom,10px));}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--g700);margin-bottom:18px;}
+
+/* ── TABS ── */
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.hidden{display:none!important;}
+
+/* ── STAT TRIO ── */
+.trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.trio-box{background:var(--g50);border-radius:12px;padding:12px 8px;text-align:center;}
+.trio-val{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--g700);}
+.trio-label{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:36px 16px;color:var(--muted);}
+.empty-icon{font-size:42px;margin-bottom:10px;}
+.empty-text{font-size:13px;line-height:1.7;}
+
+/* ── AI ── */
+.ai-text{font-size:14px;line-height:1.9;color:var(--text);white-space:pre-wrap;}
+.ai-card{border-left:3px solid var(--gold);padding-left:14px;}
+.thinking{text-align:center;padding:32px;}
+.thinking-dot{width:8px;height:8px;border-radius:50%;background:var(--g300);display:inline-block;margin:0 3px;animation:bounce 1.2s infinite;}
+.thinking-dot:nth-child(2){animation-delay:0.2s;}
+.thinking-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-10px);}}
+
+/* ── PRODUCT BADGE ── */
+.type-pill{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px;}
+.type-domestic{background:#E8F5E9;color:#2E7D32;}
+.type-export{background:#E3F2FD;color:#1565C0;}
+
+/* ── CHANNEL DETAIL CARD ── */
+.ch-detail{margin-bottom:12px;}
+.ch-detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.ch-detail-name{font-size:14px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="brand-mark">
+      <div class="leaf-icon">🌿</div>
+      <div>
+        <div class="brand-name">MURI</div>
+        <div class="brand-tag">Rokis Enterprise</div>
+      </div>
+    </div>
+    <div class="header-rev">
+      <div class="rev-label">Revenue</div>
+      <div class="rev-val" id="hrev">₹0 + $0</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ── OVERVIEW ── -->
+  <div class="tab-content active" id="tab-dashboard">
+    <!-- Hero -->
+    <div class="hero-card">
+      <div class="hero-greeting">Good work, Rokith 👋</div>
+      <div class="hero-name">MURI Overview</div>
+      <div class="hero-sub">Your Natural Wellness Business</div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-val" id="hero-muri">₹0</div>
+          <div class="hero-stat-label">MURI Domestic</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val" id="hero-export">$0</div>
+          <div class="hero-stat-label">Export Revenue</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-row" id="kpi-grid"></div>
+
+    <!-- Products -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📦 Products</span>
+        <button class="btn btn-sm" style="background:var(--g50);color:var(--g700);border:none;font-family:Inter,sans-serif;font-weight:700;cursor:pointer;border-radius:10px;padding:6px 12px;font-size:12px;" onclick="openModal('m-product')">+ Add</button>
+      </div>
+      <div id="prod-bars"></div>
+    </div>
+
+    <!-- Channels -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🚀 Ad Channels</span>
+        <button class="btn btn-sm" style="background:var(--g50);color:var(--g700);border:none;font-family:Inter,sans-serif;font-weight:700;cursor:pointer;border-radius:10px;padding:6px 12px;font-size:12px;" onclick="openModal('m-channel')">+ Add</button>
+      </div>
+      <div id="ch-overview"></div>
+    </div>
+
+    <!-- Recent -->
+    <div class="card">
+      <div class="card-header"><span class="card-title">🕐 Recent Sales</span></div>
+      <div id="recent-list"></div>
+    </div>
+  </div>
+
+  <!-- ── SALES ── -->
+  <div class="tab-content" id="tab-sales">
+    <button class="btn btn-primary" style="margin-bottom:14px" onclick="openModal('m-sale')">+ Record Sale</button>
+    <div id="sales-list"></div>
+  </div>
+
+  <!-- ── ADS ── -->
+  <div class="tab-content" id="tab-ads">
+    <button class="btn btn-primary" style="margin-bottom:14px" onclick="openModal('m-ad')">+ Log Ad Performance</button>
+    <div class="card" style="border-top:3px solid var(--gold)">
+      <div class="card-header"><span class="card-title">📈 Overall Summary</span></div>
+      <div class="trio" id="ad-trio"></div>
+    </div>
+    <div id="ad-detail"></div>
+  </div>
+
+  <!-- ── AI ── -->
+  <div class="tab-content" id="tab-ai">
+    <!-- AI Hero -->
+    <div class="card" style="background:linear-gradient(135deg,var(--g900),var(--g700));border:none;text-align:center;padding:28px 20px;">
+      <div style="font-size:52px;margin-bottom:12px;">🤖</div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;color:white;font-weight:700;margin-bottom:8px;">AI Business Advisor</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:22px;">Claude analyzes your MURI sales and ad data. One tap — know exactly where to focus.</div>
+      <button class="btn btn-gold" onclick="getAI()">✦ Get AI Insights</button>
+    </div>
+
+    <div id="ai-result"></div>
+
+    <!-- Data snapshot -->
+    <div class="card" style="margin-top:12px;">
+      <div class="card-header"><span class="card-title">📊 Data Snapshot</span></div>
+      <div id="data-snap"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn" onclick="goTab('dashboard')">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label" id="nl-dashboard" style="color:var(--g700)">Overview</span>
+    <div class="nav-pip" id="nd-dashboard"></div>
+  </button>
+  <button class="nav-btn" onclick="goTab('sales')">
+    <span class="nav-icon">💰</span>
+    <span class="nav-label" id="nl-sales" style="color:var(--muted)">Sales</span>
+    <div class="nav-pip hidden" id="nd-sales"></div>
+  </button>
+  <button class="nav-btn" onclick="goTab('ads')">
+    <span class="nav-icon">🚀</span>
+    <span class="nav-label" id="nl-ads" style="color:var(--muted)">Ads</span>
+    <div class="nav-pip hidden" id="nd-ads"></div>
+  </button>
+  <button class="nav-btn" onclick="goTab('ai')">
+    <span class="nav-icon">✦</span>
+    <span class="nav-label" id="nl-ai" style="color:var(--muted)">AI</span>
+    <div class="nav-pip hidden" id="nd-ai"></div>
+  </button>
+</nav>
+
+<!-- ── MODALS ── -->
+
+<!-- Add Product -->
+<div class="overlay hidden" id="m-product">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Add Product Line</div>
+    <div class="field"><label class="field-label">Product Name</label><input id="np-name" placeholder="e.g. MURI Moringa Tea"></div>
+    <div class="field"><label class="field-label">Type</label><div class="select-wrap"><select id="np-type"><option value="domestic">Domestic (MURI)</option><option value="export">Export</option></select></div></div>
+    <div class="field"><label class="field-label">Currency</label><div class="select-wrap"><select id="np-unit"><option value="₹">₹ Indian Rupee</option><option value="$">$ US Dollar</option></select></div></div>
+    <button class="btn btn-primary" onclick="addProduct()">Add Product</button>
+  </div>
+</div>
+
+<!-- Record Sale -->
+<div class="overlay hidden" id="m-sale">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Record Sale</div>
+    <div class="field"><label class="field-label">Product</label><div class="select-wrap"><select id="ns-product"></select></div></div>
+    <div class="field"><label class="field-label">Revenue Amount</label><input id="ns-amount" type="number" placeholder="Enter amount received"></div>
+    <div class="field"><label class="field-label">Quantity in kg (optional)</label><input id="ns-qty" type="number" placeholder="e.g. 2"></div>
+    <div class="field"><label class="field-label">Date</label><input id="ns-date" type="date"></div>
+    <div class="field"><label class="field-label">Note</label><input id="ns-note" placeholder="Buyer name, city, etc."></div>
+    <button class="btn btn-primary" onclick="addSale()">Save Sale</button>
+  </div>
+</div>
+
+<!-- Log Ad -->
+<div class="overlay hidden" id="m-ad">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Log Ad Performance</div>
+    <div class="field"><label class="field-label">Ad Channel</label><div class="select-wrap"><select id="na-channel"></select></div></div>
+    <div class="field"><label class="field-label">Amount Spent (₹)</label><input id="na-spend" type="number" placeholder="e.g. 500"></div>
+    <div class="field"><label class="field-label">Reach — people who saw ad</label><input id="na-reach" type="number" placeholder="e.g. 3000"></div>
+    <div class="field"><label class="field-label">Orders / Enquiries</label><input id="na-orders" type="number" placeholder="e.g. 5"></div>
+    <div class="field"><label class="field-label">Date</label><input id="na-date" type="date"></div>
+    <button class="btn btn-primary" onclick="addAd()">Save Ad Data</button>
+  </div>
+</div>
+
+<!-- Add Channel -->
+<div class="overlay hidden" id="m-channel">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Add Ad Channel</div>
+    <div class="field"><label class="field-label">Channel Name</label><input id="nc-name" placeholder="e.g. Facebook Ads, Google"></div>
+    <div class="field"><label class="field-label">Platform</label><div class="select-wrap"><select id="nc-platform"><option>Instagram</option><option>Facebook</option><option>WhatsApp</option><option>Google</option><option>YouTube</option><option>Other</option></select></div></div>
+    <button class="btn btn-primary" onclick="addChannel()">Add Channel</button>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+function load(k,d){try{var r=localStorage.getItem(k);return r?JSON.parse(r):d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+var products=load('muri_products',[
+  {id:'muri',name:'MURI Moringa Powder',type:'domestic',unit:'₹'},
+  {id:'export',name:'Export Moringa Powder',type:'export',unit:'$'}
+]);
+var channels=load('muri_channels',[
+  {id:'ig1',name:'Instagram @muri.moringa',platform:'Instagram'},
+  {id:'ig2',name:'Instagram Rokis Enterprise',platform:'Instagram'},
+  {id:'wa',name:'WhatsApp Broadcast',platform:'WhatsApp'}
+]);
+var sales=load('muri_sales',[]);
+var adData=load('muri_addata',[]);
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+function computeStats(){
+  var ms=sales.filter(function(s){var p=getProduct(s.pid);return p&&p.type==='domestic';});
+  var es=sales.filter(function(s){var p=getProduct(s.pid);return p&&p.type==='export';});
+  var mr=sum(ms,'amt'); var er=sum(es,'amt');
+  var asp=sum(adData,'spend'); var aor=sum(adData,'orders'); var arc=sum(adData,'reach');
+  var roas=asp>0?(mr/asp).toFixed(2):'—';
+  var pr={};
+  products.forEach(function(p){pr[p.id]=sum(sales.filter(function(s){return s.pid===p.id;}),'amt');});
+  var chs=channels.map(function(c){
+    var e=adData.filter(function(a){return a.cid===c.id;});
+    return Object.assign({},c,{spend:sum(e,'spend'),orders:sum(e,'orders'),reach:sum(e,'reach')});
+  });
+  return{ms:ms,es:es,mr:mr,er:er,asp:asp,aor:aor,arc:arc,roas:roas,pr:pr,chs:chs};
+}
+function sum(arr,key){return arr.reduce(function(a,e){return a+Number(e[key]||0);},0);}
+function getProduct(id){return products.find(function(p){return p.id===id;});}
+function today(){return new Date().toISOString().split('T')[0];}
+function fmt(n){return Number(n).toLocaleString('en-IN');}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  var s=computeStats();
+
+  // header + hero
+  document.getElementById('hrev').textContent='₹'+fmt(s.mr)+' + $'+fmt(s.er);
+  document.getElementById('hero-muri').textContent='₹'+fmt(s.mr);
+  document.getElementById('hero-export').textContent='$'+fmt(s.er);
+
+  // KPIs
+  var roasColor=s.roas==='—'?'var(--muted)':Number(s.roas)>=2?'var(--g500)':'#DC2626';
+  var kpis=[
+    {label:'MURI Orders',val:s.ms.length,sub:'Domestic sales',icon:'🛒',color:'var(--g700)',pct:Math.min(100,s.ms.length*10)},
+    {label:'Export Orders',val:s.es.length,sub:'International',icon:'✈️',color:'#1565C0',pct:Math.min(100,s.es.length*10)},
+    {label:'Ad Spend',val:'₹'+fmt(s.asp),sub:s.aor+' orders from ads',icon:'📣',color:'#7B1FA2',pct:s.asp>0?Math.min(100,(s.aor/Math.max(s.asp/100,1))*10):0},
+    {label:'ROAS',val:s.roas==='—'?'—':s.roas+'x',sub:'Return on ad spend',icon:'📈',color:roasColor,pct:s.roas==='—'?0:Math.min(100,Number(s.roas)*20)}
+  ];
+  document.getElementById('kpi-grid').innerHTML=kpis.map(function(k){
+    return'<div class="kpi" data-icon="'+k.icon+'"><div class="kpi-label">'+k.label+'</div><div class="kpi-val" style="color:'+k.color+'">'+k.val+'</div><div class="kpi-sub">'+k.sub+'</div><div class="kpi-bar"><div class="kpi-bar-fill" style="width:'+k.pct+'%;background:'+k.color+'"></div></div></div>';
+  }).join('');
+
+  // Product bars
+  var maxRev=Math.max.apply(null,Object.values(s.pr).concat([1]));
+  document.getElementById('prod-bars').innerHTML=products.length?products.map(function(p){
+    var rev=s.pr[p.id]||0; var pct=(rev/maxRev)*100;
+    var cnt=sales.filter(function(x){return x.pid===p.id;}).length;
+    var pill='<span class="type-pill type-'+p.type+'">'+(p.type==='domestic'?'Domestic':'Export')+'</span>';
+    return'<div class="prod-row"><div class="prod-top"><span class="prod-name">'+p.name+' '+pill+'</span><span class="prod-rev">'+p.unit+fmt(rev)+'</span></div><div class="prod-bar-bg"><div class="prod-bar-fill" style="width:'+pct+'%"></div></div><div class="prod-meta">'+cnt+' entries recorded</div></div>';
+  }).join('')+'<button class="btn btn-outline" style="margin-top:4px;font-family:Inter,sans-serif;font-weight:700;" onclick="openModal(\'m-product\')">+ Add Product Line</button>':'<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">No products yet.</div></div>';
+
+  // Channel overview
+  document.getElementById('ch-overview').innerHTML=s.chs.map(function(c){
+    return'<div class="ch-row"><div><div style="font-size:13px;font-weight:600">'+c.name+'</div><span class="ch-pill">'+c.platform+'</span></div><div><div class="ch-amt">₹'+fmt(c.spend)+'</div><div class="ch-orders">'+c.orders+' orders · '+fmt(c.reach)+' reach</div></div></div>';
+  }).join('')||'<div class="empty"><div class="empty-icon">📡</div><div class="empty-text">No channels yet.</div></div>';
+
+  // Recent sales
+  var rec=[].concat(sales).reverse().slice(0,6);
+  document.getElementById('recent-list').innerHTML=rec.length?rec.map(function(x){
+    var p=getProduct(x.pid);
+    return'<div class="sale-row"><div><div class="sale-name">'+(p?p.name:'Unknown')+'</div><div class="sale-meta">'+x.date+(x.note?' · '+x.note:'')+'</div></div><div class="sale-val">'+(p?p.unit:'')+fmt(x.amt)+'</div></div>';
+  }).join(''):'<div class="empty"><div class="empty-icon">💰</div><div class="empty-text">No sales recorded yet.<br>Tap Sales tab to add your first sale.</div></div>';
+
+  // Sales tab
+  var sh='';
+  products.forEach(function(p){
+    var ps=sales.filter(function(x){return x.pid===p.id;});
+    if(!ps.length)return;
+    var rev=sum(ps,'amt');
+    sh+='<div class="card"><div class="card-header"><span class="card-title">'+p.name+'</span><span style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;color:var(--g700)">'+p.unit+fmt(rev)+'</span></div>'+[].concat(ps).reverse().map(function(x){return'<div class="sale-row"><div><div class="sale-name">'+p.unit+fmt(x.amt)+(x.qty?' · '+x.qty+'kg':'')+'</div><div class="sale-meta">'+x.date+(x.note?' · '+x.note:'')+'</div></div><button class="del" onclick="delSale(\''+x.id+'\')">×</button></div>';}).join('')+'</div>';
+  });
+  document.getElementById('sales-list').innerHTML=sh||'<div class="empty" style="margin-top:20px"><div class="empty-icon">💰</div><div class="empty-text">No sales yet.<br>Tap + Record Sale above.</div></div>';
+
+  // Ad trio
+  document.getElementById('ad-trio').innerHTML=[
+    {l:'Spent',v:'₹'+fmt(s.asp)},
+    {l:'Reach',v:fmt(s.arc)},
+    {l:'Orders',v:s.aor}
+  ].map(function(x){return'<div class="trio-box"><div class="trio-val">'+x.v+'</div><div class="trio-label">'+x.l+'</div></div>';}).join('');
+
+  // Ad channel detail
+  var ah='';
+  s.chs.forEach(function(c){
+    var entries=adData.filter(function(a){return a.cid===c.id;});
+    if(!entries.length)return;
+    ah+='<div class="card"><div class="ch-detail-header"><div class="ch-detail-name">'+c.name+'</div><span class="ch-pill">'+c.platform+'</span></div><div class="trio"><div class="trio-box"><div class="trio-val">₹'+fmt(c.spend)+'</div><div class="trio-label">Spent</div></div><div class="trio-box"><div class="trio-val">'+fmt(c.reach)+'</div><div class="trio-label">Reach</div></div><div class="trio-box"><div class="trio-val">'+c.orders+'</div><div class="trio-label">Orders</div></div></div>'+[].concat(entries).reverse().map(function(a){return'<div class="sale-row"><div><div class="sale-name">'+a.date+'</div><div class="sale-meta">Reach '+fmt(a.reach)+' · Orders '+a.orders+'</div></div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;font-weight:700;color:var(--g700)">₹'+fmt(a.spend)+'</span><button class="del" onclick="delAd(\''+a.id+'\')">×</button></div></div>';}).join('')+'</div>';
+  });
+  document.getElementById('ad-detail').innerHTML=ah||'<div class="empty" style="margin-top:20px"><div class="empty-icon">🚀</div><div class="empty-text">No ad data yet.<br>Log your first boost above.</div></div>';
+
+  // Data snapshot
+  document.getElementById('data-snap').innerHTML=[
+    {l:'Sales Recorded',v:sales.length},
+    {l:'MURI Revenue',v:'₹'+fmt(s.mr)},
+    {l:'Export Revenue',v:'$'+fmt(s.er)},
+    {l:'Total Ad Spend',v:'₹'+fmt(s.asp)},
+    {l:'Products Tracked',v:products.length},
+    {l:'Ad Channels',v:channels.length}
+  ].map(function(x){return'<div class="sale-row"><span style="font-size:13px;color:var(--muted)">'+x.l+'</span><span style="font-size:13px;font-weight:700;color:var(--g700)">'+x.v+'</span></div>';}).join('');
+
+  // Populate selects
+  var psel=document.getElementById('ns-product');
+  if(psel)psel.innerHTML=products.map(function(p){return'<option value="'+p.id+'">'+p.name+'</option>';}).join('');
+  var csel=document.getElementById('na-channel');
+  if(csel)csel.innerHTML=channels.map(function(c){return'<option value="'+c.id+'">'+c.name+'</option>';}).join('');
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+var cur='dashboard';
+function goTab(t){
+  document.getElementById('tab-'+cur).classList.remove('active');
+  document.getElementById('nl-'+cur).style.color='var(--muted)';
+  document.getElementById('nd-'+cur).classList.add('hidden');
+  cur=t;
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('nl-'+t).style.color='var(--g700)';
+  document.getElementById('nd-'+t).classList.remove('hidden');
+  render();
+}
+
+// ── MODALS ────────────────────────────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.remove('hidden');}
+function closeModal(id){document.getElementById(id).classList.add('hidden');}
+document.querySelectorAll('.overlay').forEach(function(m){
+  m.addEventListener('click',function(e){if(e.target===m)m.classList.add('hidden');});
+});
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+function addProduct(){
+  var n=document.getElementById('np-name').value.trim();
+  if(!n)return;
+  products.push({id:Date.now().toString(),name:n,type:document.getElementById('np-type').value,unit:document.getElementById('np-unit').value});
+  save('muri_products',products);
+  document.getElementById('np-name').value='';
+  closeModal('m-product');render();
+}
+function addSale(){
+  var amt=document.getElementById('ns-amount').value;
+  var pid=document.getElementById('ns-product').value;
+  if(!amt||!pid)return;
+  sales.push({id:Date.now().toString(),pid:pid,amt:amt,qty:document.getElementById('ns-qty').value,date:document.getElementById('ns-date').value||today(),note:document.getElementById('ns-note').value});
+  save('muri_sales',sales);
+  ['ns-amount','ns-qty','ns-note'].forEach(function(i){document.getElementById(i).value='';});
+  closeModal('m-sale');render();
+}
+function addAd(){
+  var sp=document.getElementById('na-spend').value;
+  var cid=document.getElementById('na-channel').value;
+  if(!sp||!cid)return;
+  adData.push({id:Date.now().toString(),cid:cid,spend:sp,reach:document.getElementById('na-reach').value||0,orders:document.getElementById('na-orders').value||0,date:document.getElementById('na-date').value||today()});
+  save('muri_addata',adData);
+  ['na-spend','na-reach','na-orders'].forEach(function(i){document.getElementById(i).value='';});
+  closeModal('m-ad');render();
+}
+function addChannel(){
+  var n=document.getElementById('nc-name').value.trim();
+  if(!n)return;
+  channels.push({id:Date.now().toString(),name:n,platform:document.getElementById('nc-platform').value});
+  save('muri_channels',channels);
+  document.getElementById('nc-name').value='';
+  closeModal('m-channel');render();
+}
+function delSale(id){sales=sales.filter(function(s){return s.id!==id;});save('muri_sales',sales);render();}
+function delAd(id){adData=adData.filter(function(a){return a.id!==id;});save('muri_addata',adData);render();}
+
+// ── AI ────────────────────────────────────────────────────────────────────────
+async function getAI(){
+  var el=document.getElementById('ai-result');
+  el.innerHTML='<div class="card thinking"><div><span class="thinking-dot"></span><span class="thinking-dot"></span><span class="thinking-dot"></span></div><div style="margin-top:12px;color:var(--muted);font-size:13px">Claude is analyzing your MURI data...</div></div>';
+  var s=computeStats();
+  var payload={muriRevenue:s.mr,exportRevenue:s.er,totalAdSpend:s.asp,totalReach:s.arc,totalOrders:s.aor,roas:s.roas,salesCount:sales.length,products:products.map(function(p){return{name:p.name,type:p.type,revenue:s.pr[p.id]||0};}),channels:s.chs.map(function(c){return{name:c.name,platform:c.platform,spend:c.spend,orders:c.orders,reach:c.reach};})};
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:'You are a sharp business advisor for MURI Moringa Powder by Rokis Enterprise, Madurai, Tamil Nadu. Rokith runs this as a side business alongside a 10-hour day job. Be honest, direct, practical — like a smart friend who knows business. A little Tamil is fine.\n\nBusiness data:\n'+JSON.stringify(payload)+'\n\nRespond with exactly 4 sections:\n✅ What is working well\n⚠️ What needs attention right now\n🎯 ONE specific action to take this week\n💰 Is the ad spend worth it — yes or no and why\n\nBe specific, under 200 words total. No fluff.'}]})});
+    var data=await res.json();
+    var text=(data.content&&data.content[0]?data.content[0].text:null)||'Unable to get insights. Check your internet connection and try again.';
+    el.innerHTML='<div class="card ai-card"><div class="card-header"><span class="card-title">✦ AI Analysis</span><span style="font-size:11px;color:var(--muted)">Claude</span></div><div class="ai-text">'+text+'</div><button class="btn btn-outline" style="margin-top:16px;font-family:Inter,sans-serif;font-weight:700;" onclick="getAI()">↻ Refresh</button></div>';
+  }catch(e){
+    el.innerHTML='<div class="card"><div style="color:#DC2626;font-size:13px;text-align:center;padding:12px">Connection error. Check internet and try again.</div></div>';
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.getElementById('ns-date').value=today();
+document.getElementById('na-date').value=today();
+render();
+</script>
+</body>
+</html>
